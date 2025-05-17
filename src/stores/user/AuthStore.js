@@ -13,5 +13,19 @@ const login = async (email, password) => {
         throw error;
     }
 };
+// Register
+const register = async (name, email, password) => {
+    try {
+        const response = await axios.post(`${RutaApi}/auth/register`, {
+            name,
+            email,
+            password
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error during registration:", error);
+        throw error;
+    }
+};
 
-export { login };
+export { login, register };

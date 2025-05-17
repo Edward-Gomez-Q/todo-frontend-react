@@ -3,6 +3,7 @@ import Layout from "./component/layout";
 
 import Login from "./pages/login"
 import TasksList from "./pages/tasks";
+import SignUp from "./pages/signup";
 
 
 const router = createBrowserRouter([
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
             {
                 index: true,
                 element: <Login />,
+            },
+            {
+                path: "/signup",
+                element: <SignUp />,
             },
             {
                 path: "/tasks",
