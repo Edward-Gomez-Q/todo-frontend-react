@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 
 function TasksList() {
-
-  //Validar si el token de acceso existe, si no redirigir a la página de inicio de sesión
   const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -15,6 +13,7 @@ function TasksList() {
       localStorage.removeItem("access_token");
       navigate("/");
     }
+    setSearchInput(filters.searchTituloAndDescription);
   }, [navigate]);
 
 
@@ -36,6 +35,7 @@ function TasksList() {
     fechaInicio: "",
     fechaFin: ""
   });
+  const [ searchInput, setSearchInput ] = useState("");
   const [isModalActive, setIsModalActive] = useState(false);
   const [modalType, setModalType] = useState("create");
   const [selectedTask, setSelectedTask] = useState(null);
@@ -151,16 +151,37 @@ function TasksList() {
         </div>
       </div>
 
-      <div className="flex flex-col flex-grow space-y-2">
-        <span className="text-sm font-semibold text-bgray-600 dark:text-bgray-50">Buscar</span>
-        <input
-          type="text"
-          placeholder="Buscar por título o descripción..."
-          value={filters.searchTituloAndDescription}
-          onChange={(e) => handleFilterChange("searchTituloAndDescription", e.target.value)}
-          className="w-full rounded-lg border border-bgray-300 px-3 py-[14px] text-sm font-medium text-bgray-900 placeholder:text-bgray-400 dark:border-darkblack-400 dark:bg-darkblack-500 dark:text-bgray-50"
-        />
+      <div className="flex flex-col sm:flex-row flex-grow sm:items-end gap-2 sm:gap-4">
+        <div className="flex flex-col flex-grow space-y-2">
+          <span className="text-sm font-semibold text-bgray-600 dark:text-bgray-50">Buscar</span>
+          <input
+            type="text"
+            placeholder="Buscar por título o descripción..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleFilterChange("searchTituloAndDescription", searchInput);
+                setPagination(prev => ({ ...prev, currentPage: 1 }));
+              }
+            }}
+            className="w-full rounded-lg border border-bgray-300 px-3 py-3 text-sm font-medium text-bgray-900 placeholder:text-bgray-400 dark:border-darkblack-400 dark:bg-darkblack-500 dark:text-bgray-50"
+          />
+        </div>
+
+        <div className="sm:pb-[6px]">
+          <button
+            onClick={() => {
+              handleFilterChange("searchTituloAndDescription", searchInput);
+              setPagination(prev => ({ ...prev, currentPage: 1 }));
+            }}
+            className="w-full sm:w-auto rounded-lg bg-success-300 hover:bg-success-400 text-white px-4 py-2 text-sm font-semibold transition-all"
+          >
+            Buscar
+          </button>
+        </div>
       </div>
+
     </div>
   );
 
