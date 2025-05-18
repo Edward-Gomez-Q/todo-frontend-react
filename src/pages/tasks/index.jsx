@@ -1,11 +1,28 @@
 import { useState, useEffect } from "react";
 import TaskCard from "../../component/taskCard";
 import { getAllTasks } from "../../stores/tasks/TaskStore";
+import TaskModals from "../../component/modal/taskInfo";
+import { useNavigate } from "react-router-dom";
+
 
 function TasksList() {
+
+  //Validar si el token de acceso existe, si no redirigir a la página de inicio de sesión
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (!token || token === "undefined") {
+      localStorage.removeItem("access_token");
+      navigate("/");
+    }
+  }, [navigate]);
+
+
+
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const AccessToken = localStorage.getItem("access_token");
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
@@ -19,39 +36,58 @@ function TasksList() {
     fechaInicio: "",
     fechaFin: ""
   });
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [modalType, setModalType] = useState("create");
+  const [selectedTask, setSelectedTask] = useState(null);
+  const openCreateTaskModal = () => {
+    setModalType("create");
+    setSelectedTask(null);
+    setIsModalActive(true);
+  };
+  const fetchTasks = async (token) => {
+      if (!token) {
+        setError("No se encontró token de acceso. Por favor, inicia sesión de nuevo.");
+        return;
+      }
+      try {
+        setLoading(true);
+        setError(null);
 
- const fetchTasks = async (token) => {
-    if (!token) {
-      setError("No se encontró token de acceso. Por favor, inicia sesión de nuevo.");
-      return;
-    }
-    try {
-      setLoading(true);
-      setError(null);
-
-      const data = await getAllTasks(token, {
-        page: pagination.currentPage,
-        limit: pagination.limit,
-        ...filters
-      });
-      console.log("Tasks data:", data);
-      setTasks(data.tareas);
-      setPagination({
-        currentPage: data.pagination.page,
-        totalPages: data.pagination.totalPages,
-        limit: data.pagination.limit
-      });
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
-      setError("Error al cargar las tareas. Por favor, intenta de nuevo más tarde.");
-    } finally {
-      setLoading(false);
-    }
+        const data = await getAllTasks(token, {
+          page: pagination.currentPage,
+          limit: pagination.limit,
+          ...filters
+        });
+        console.log("Tasks data:", data);
+        setTasks(data.tareas);
+        setPagination({
+          currentPage: data.pagination.page,
+          totalPages: data.pagination.totalPages,
+          limit: data.pagination.limit
+        });
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        setError("Error al cargar las tareas. Por favor, intenta de nuevo más tarde.");
+      } finally {
+        setLoading(false);
+      }
+  };
+  const handleTaskAction = () => {
+    fetchTasks(AccessToken);
   };
 
   const handleTaskClick = (task) => {
-    console.log("Task clicked:", task);
+    const taskForModal = {
+      id: task.id,
+      title: task.title,
+      description: task.description,
+      dueDate: task.dueDate,
+      estado: parseInt(task.state) // Convertir a número
     };
+    setSelectedTask(taskForModal);
+    setModalType("info");
+    setIsModalActive(true);
+  };
 
   const handleFilterChange = (name, value) => {
     setFilters(prevFilters => ({
@@ -217,9 +253,31 @@ function TasksList() {
 
   return (
     <main className="w-full xl:px-12 px-6 pb-6 xl:pb-6 sm:pt-[39px] pt-[25px]">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Mis Tareas</h1>
-        <p className="text-gray-600 dark:text-gray-300">Gestiona y organiza tus tareas diarias</p>
+      <div className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Mis Tareas</h1>
+          <p className="text-gray-600 dark:text-gray-300">Gestiona y organiza tus tareas diarias</p>
+        </div>
+        <button
+          onClick={openCreateTaskModal}
+          className="px-4 py-2 bg-success-300 hover:bg-success-400 text-white rounded-lg transition-all flex items-center"
+        >
+          <svg 
+            className="w-5 h-5 mr-2" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24" 
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6" 
+            />
+          </svg>
+          Crear
+        </button>
       </div>
       <section className=" w-full 2xl:mb-0 mb-6">
         {renderFilters()}
@@ -243,6 +301,7 @@ function TasksList() {
               <TaskCard 
                 key={task.id} 
                 task={{
+                  id: task.id,
                   title: task.titulo,
                   description: task.descripcion,
                   dueDate: task.fechaLimite,
@@ -257,6 +316,15 @@ function TasksList() {
         
         {renderPagination()}
       </section>
+      <TaskModals 
+        isActive={isModalActive}
+        modalType={modalType}
+        taskData={selectedTask}
+        token={AccessToken}
+        handleActive={setIsModalActive}
+        onTaskUpdated={handleTaskAction}
+        onTaskCreated={handleTaskAction}
+      />
     </main>
   );
 }
