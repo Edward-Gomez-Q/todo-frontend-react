@@ -104,13 +104,6 @@ export default {
           400: "#363B46",
         },
       },
-      backgroundImage: {
-        "bgc-dark":
-          "url('./src/assets/images/background/comming-soon-dark.svg')",
-        "bgc-light": "url('./src/assets/images/background/coming-soon-bg.svg')",
-        "notfound-dark": "url('./src/assets/images/background/404-dark.jpg')",
-        "notfound-light": "url('./src/assets/images/background/404-bg.png')",
-      },
       lineHeight: {
         "extra-loose": "44.8px",
         "big-loose": "140%",

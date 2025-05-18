@@ -1,6 +1,5 @@
 import logoColor from "../../assets/images/logo/logo_white.png";
 import logoDark from "../../assets/images/logo/logo_dark.png";
-import ModeToggler from "../../component/modeToggler";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { register, login } from "../../stores/user/AuthStore";
@@ -58,7 +57,7 @@ function SignUpForm() {
                 setSuccessMessage(null);
                 setSuccess(false);
                 setLoading(false);
-                navigate("/tasks");
+                navigate("/user/tasks");
             }, 3000);
 
         } catch (error) {
@@ -74,7 +73,6 @@ function SignUpForm() {
                 <img src={logoColor} alt="Logo" className="block dark:hidden size-24" />
                 <img src={logoDark} alt="Logo" className="hidden dark:block size-24" />
                 </Link>
-                <ModeToggler />
             </header>
             <div className="max-w-[450px] m-auto pt-14 pb-16">
                 <header className="text-center mb-8">

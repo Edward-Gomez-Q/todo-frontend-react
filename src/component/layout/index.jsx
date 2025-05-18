@@ -1,33 +1,39 @@
-import PropTypes from "prop-types";
+import ProtoTypes from "prop-types";
 import Overlay from "../overlay";
 import { useState, useEffect, createContext } from "react";
 import { Outlet } from "react-router-dom";
+import Sidebar from "../sidebar";
 
 export const ThemeContext = createContext(null);
 
 function Layout({ bg, overlay, children }) {
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("theme");
-    return savedTheme ? savedTheme : "dark";
-  });
-
-  useEffect(() => {
-    localStorage.setItem("theme", theme);
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, [theme]);
-
+  const [sidebar, setSidebar] = useState(true);
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") === "" || localStorage.getItem("theme")
+      ? localStorage.getItem("theme")
+      : ""
+  );
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <div
-        className={`layout-wrapper w-full min-h-screen ${
-          bg ? bg : "dark:bg-darkblack-500"
-        }`}
-        style={{ borderColor: "#2a313c" }}
+        className={`layout-wrapper ${
+          sidebar && "active"
+        }  w-full dark:bg-darkblack-600 `}
+        style={{
+          borderColor: "#2a313c",
+        }}
       >
-        {overlay ? overlay : <Overlay />}
-        <div className="relative flex flex-col w-full">
-          <Outlet />
-          {children}
+        <div className="relative flex w-full">
+          {overlay ? overlay : <Overlay />}
+          <Sidebar />
+          <div
+            className={`body-wrapper flex-1 overflow-x-hidden ${
+              bg ? bg : "dark:bg-darkblack-500"
+            } `}
+          >
+            <Outlet />
+            {children}
+          </div>
         </div>
       </div>
     </ThemeContext.Provider>
@@ -35,9 +41,9 @@ function Layout({ bg, overlay, children }) {
 }
 
 Layout.propTypes = {
-  bg: PropTypes.string,
-  overlay: PropTypes.node,
-  children: PropTypes.node,
+  bg: ProtoTypes.string,
+  overlay: ProtoTypes.node,
+  children: ProtoTypes.node,
 };
 
 export default Layout;
