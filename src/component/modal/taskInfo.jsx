@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import {createTask, updateTask, deleteTask} from "../../stores/tasks/TaskStore";
 
 
-// Componente para el botón de cerrar (reutilizado del ejemplo)
 export const CrossBtn = ({ close }) => {
   return (
     <div className="absolute top-0 right-0 pt-5 pr-5">
@@ -217,6 +216,7 @@ return (
                 name="dueDate"
                 value={taskData.dueDate}
                 onChange={handleInputChange}
+                min={new Date().toISOString().split("T")[0]}
                 disabled={isReadOnly}
                 className={`rounded-lg bg-[#F5F5F5] dark:bg-darkblack-500 dark:text-white p-4 border-0 focus:border focus:ring-0 focus:border-success-300 w-full placeholder:font-medium text-base ${isReadOnly ? "opacity-70 cursor-not-allowed" : ""}`}
               />
