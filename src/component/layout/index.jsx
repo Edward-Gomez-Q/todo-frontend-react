@@ -16,9 +16,7 @@ function Layout({ bg, overlay, children }) {
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       <div
-        className={`layout-wrapper ${
-          sidebar && "active"
-        }  w-full dark:bg-darkblack-600 `}
+        className={`layout-wrapper  w-full dark:bg-darkblack-600 `}
         style={{
           borderColor: "#2a313c",
         }}

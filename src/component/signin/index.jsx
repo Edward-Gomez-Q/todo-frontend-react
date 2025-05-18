@@ -43,14 +43,14 @@ function SignInForm() {
   };
 
   return (
-    <div className="lg:w-1/2 px-5 xl:pl-12 pt-10 lg:pt-20 lg:pr-10 lg:pb-10 m-auto">
-      <header className="flex items-center justify-between mb-2">
+    <div className="lg:w-1/2 px-5 xl:pl-12 pt-5 lg:pt-20 lg:pr-10 lg:pb-10 m-auto">
+      <header className="flex items-center justify-between mb-1 sm:mb-2">
         <Link to="/" className="">
-          <img src={logoColor} alt="Logo" className="block dark:hidden size-24" />
-          <img src={logoDark} alt="Logo" className="hidden dark:block size-24" />
+          <img src={logoColor} alt="Logo" className="block dark:hidden sm:size-24 size-16" />
+          <img src={logoDark} alt="Logo" className="hidden dark:block sm:size-24 size-16" />
         </Link>
       </header>
-      <div className="max-w-[450px] m-auto pt-14 pb-16">
+      <div className="max-w-[450px] m-auto sm:pt-14 sm:pb-16 pt-5 pb-10">
         <header className="text-center mb-8">
           <h2 className="text-bgray-900 dark:text-white text-4xl font-semibold font-poppins mb-2">
             Inicie Sesión en TaskBo

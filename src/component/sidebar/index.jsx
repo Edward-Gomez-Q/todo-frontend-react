@@ -8,12 +8,12 @@ function SidebarResponsive() {
     const { pathname: location } = useLocation();
 
   return (
-    <aside className="relative w-[96px] bg-white  dark:bg-darkblack-600">
+    <aside className="relative w-[64px] sm:w-[80px] md:w-[96px] bg-white dark:bg-darkblack-600">
         <div className="sidebar-wrapper-collapse relative top-0 z-30 w-full">
             <div className="sidebar-header sticky top-0 z-20 flex h-[108px] w-full items-center justify-center border-b border-r border-b-[#F7F7F7] border-r-[#F7F7F7] bg-white dark:border-darkblack-500 dark:bg-darkblack-600">
                 <Link to="/">
-                    <img src={logoColor} alt="Logo" className="block dark:hidden size-16" />
-                    <img src={logoDark} alt="Logo" className="hidden dark:block size-16" />
+                    <img src={logoColor} alt="Logo" className="block dark:hidden w-10 h-10 sm:w-14 sm:h-14" />
+                    <img src={logoDark} alt="Logo" className="hidden dark:block w-10 h-10 sm:w-14 sm:h-14" />
                 </Link>
             </div>
             <div className="sidebar-body w-full pt-[14px]">
@@ -21,7 +21,7 @@ function SidebarResponsive() {
                     <div className="nav-wrapper mb-[36px]">
                         <div className="item-wrapper mb-5">
                             <ul className="mt-2.5 flex flex-col items-center justify-center">
-                                <li className="item px-[43px] py-[11px]">
+                                <li className="item px-3 sm:px-6 py-[11px]">
                                     <Link
                                     to="/user/tasks"
                                     className={`${
@@ -69,7 +69,7 @@ function SidebarResponsive() {
                                     </span>
                                     </Link>
                                 </li>
-                                <li className="item px-[43px] py-[11px]">
+                                <li className="item px-3 sm:px-6 py-[11px]">
                                     <Link
                                     to="/user"
                                     className={`${
@@ -103,10 +103,10 @@ function SidebarResponsive() {
                                     </span>
                                     </Link>
                                 </li>
-                                <li className="item px-[43px] py-[11px]">
+                                <li className="item px-3 sm:px-6 py-[11px]">
                                     <ModeToggler />
                                 </li>
-                                <li className="item px-[43px] py-[11px]">
+                                <li className="item px-3 sm:px-6 py-[11px]">
                                     <Link to="#">
                                     <span className="item-ico">
                                         <svg
